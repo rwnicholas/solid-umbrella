@@ -276,6 +276,9 @@
  <Reference Include="Unity.Locator">
  <HintPath>/home/nicholas/.Unity/2018.4.19f1/Editor/Data/Managed/Unity.Locator.dll</HintPath>
  </Reference>
+ <Reference Include="Assembly-CSharp-firstpass">
+ <HintPath>/home/nicholas/Projects/solid-umbrella/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/home/nicholas/.Unity/2018.4.19f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -645,10 +648,6 @@
  <Reference Include="mscorlib">
  <HintPath>/home/nicholas/.Unity/2018.4.19f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/mscorlib.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{2B11D244-3F27-FBC4-3958-BD3474F88CF2}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
