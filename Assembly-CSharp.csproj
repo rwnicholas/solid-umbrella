@@ -53,13 +53,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Caracteristicas_Graficas.cs" />
-     <Compile Include="Assets\Grafico.cs" />
+     <Compile Include="Assets\Scripts\TCP\Abrv.cs" />
+     <Compile Include="Assets\Scripts\TCP\Tcp.cs" />
+     <Compile Include="Assets\Scripts\TCP\Tcp_Tahoe.cs" />
      <Compile Include="Assets\Scripts\Window_Graph.cs" />
-     <Compile Include="Assets\Tcp.cs" />
-     <Compile Include="Assets\Tcp_Cubic.cs" />
-     <Compile Include="Assets\Tcp_Reno.cs" />
-     <Compile Include="Assets\Tcp_Tahoe.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
@@ -275,9 +272,6 @@
  </Reference>
  <Reference Include="Unity.Locator">
  <HintPath>/home/nicholas/.Unity/2018.4.19f1/Editor/Data/Managed/Unity.Locator.dll</HintPath>
- </Reference>
- <Reference Include="Assembly-CSharp-firstpass">
- <HintPath>/home/nicholas/Projects/solid-umbrella/Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/home/nicholas/.Unity/2018.4.19f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

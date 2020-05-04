@@ -2,16 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using static ABRV.Abrv;
 public class Window_Graph : MonoBehaviour {
     [SerializeField] private Sprite circleSprite;
     private RectTransform graphContainer;
+    private List<int> valueList = new List<int>();
+
+    Tcp tcp1 = new Tcp_Tahoe();
 
     private void Awake() {
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
+        float updateInterval = 0.5f;
+        InvokeRepeating("UpdateInterval", updateInterval, updateInterval);
+        // List<int> valueList = new List<int> () {5,98,56,45,30,22,17,15,13,17,25,37,40,36,33};
+    }
 
-        List<int> valueList = new List<int> () {5,98,56,45,30,22,17,15,13,17,25,37,40,36,33};
+    private void UpdateInterval() {
+        var valor = tcp1.Run(ACK);
+        Debug.Log(valor);
+        valueList.Add(valor);
         ShowGraph(valueList);
+    }
+    private void prepararPacotes() {
+        
     }
 
     private GameObject CreateCircle(Vector2 anchoredPosition) {
@@ -20,7 +33,7 @@ public class Window_Graph : MonoBehaviour {
         gameObject.GetComponent<Image>().sprite = circleSprite;
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
-        rectTransform.sizeDelta = new Vector2(11, 11);
+        rectTransform.sizeDelta = new Vector2(5, 5);
         rectTransform.anchorMin = new Vector2(0, 0);
         rectTransform.anchorMax = new Vector2(0, 0);
 
@@ -30,7 +43,7 @@ public class Window_Graph : MonoBehaviour {
     private void ShowGraph(List<int> valueList) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
-        float xSize = 15f;
+        float xSize = 5f;
 
         GameObject lastCircleGameObject = null;
         for (int i = 0; i < valueList.Count; i++) {
@@ -53,7 +66,7 @@ public class Window_Graph : MonoBehaviour {
         float distance = Vector2.Distance(dotPositionA, dotPositionB);
         rectTransform.anchorMin = new Vector2(0,0);
         rectTransform.anchorMax = new Vector2(0,0);
-        rectTransform.sizeDelta = new Vector2(distance, 3f);
+        rectTransform.sizeDelta = new Vector2(distance, 1f);
         rectTransform.anchoredPosition = dotPositionA + dir * distance * .5f;
         rectTransform.localEulerAngles = new Vector3(0,0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg));
     }
