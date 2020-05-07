@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Main.cs" />
      <Compile Include="Assets\Scripts\TCP\Abrv.cs" />
      <Compile Include="Assets\Scripts\TCP\Tcp.cs" />
      <Compile Include="Assets\Scripts\TCP\Tcp_Tahoe.cs" />

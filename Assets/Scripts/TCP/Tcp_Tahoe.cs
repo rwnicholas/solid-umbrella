@@ -16,6 +16,7 @@ public class Tcp_Tahoe : Tcp {
 			} else if (recebido == TOUT) {
 				ssthreshold = cwnd/2;
 				cwnd = 1;
+				Debug.Log("Houve TOUT");
 			} else if (recebido == TACK) {
 				ssthreshold = cwnd/2;
 				cwnd = 1;

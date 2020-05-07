@@ -2,29 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ABRV.Abrv;
+
 public class Window_Graph : MonoBehaviour {
     [SerializeField] private Sprite circleSprite;
     private RectTransform graphContainer;
     private List<int> valueList = new List<int>();
 
-    Tcp tcp1 = new Tcp_Tahoe();
+    public static Window_Graph instance;
 
     private void Awake() {
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
-        float updateInterval = 0.5f;
-        InvokeRepeating("UpdateInterval", updateInterval, updateInterval);
-        // List<int> valueList = new List<int> () {5,98,56,45,30,22,17,15,13,17,25,37,40,36,33};
-    }
-
-    private void UpdateInterval() {
-        var valor = tcp1.Run(ACK);
-        Debug.Log(valor);
-        valueList.Add(valor);
-        ShowGraph(valueList);
-    }
-    private void prepararPacotes() {
-        
+        instance = this;
     }
 
     private GameObject CreateCircle(Vector2 anchoredPosition) {
@@ -40,7 +28,7 @@ public class Window_Graph : MonoBehaviour {
         return gameObject;
     }
 
-    private void ShowGraph(List<int> valueList) {
+    public void ShowGraph(List<int> valueList) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;
