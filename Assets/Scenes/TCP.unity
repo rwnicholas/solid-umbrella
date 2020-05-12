@@ -590,7 +590,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecb6418b8fa1ce98d8a307cc6bc5888b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleSprite: {fileID: 21300000, guid: a7fce92cab9049998963daa74212afc0, type: 3}
+  circleSpriteTahoe: {fileID: 21300000, guid: a7fce92cab9049998963daa74212afc0, type: 3}
+  circleSpriteReno: {fileID: 21300000, guid: b9eb4ff52adff9147805cf5471314f7b, type: 3}
 --- !u!1 &834207266
 GameObject:
   m_ObjectHideFlags: 0
