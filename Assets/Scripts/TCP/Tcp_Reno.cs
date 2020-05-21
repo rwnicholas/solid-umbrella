@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Tcp_Reno : Tcp
 {
-
+    private int cont = 0;
     public Tcp_Reno()
     {
         Debug.Log(estado);
@@ -11,7 +11,8 @@ public class Tcp_Reno : Tcp
     public override int Run(string recebido)
     {
         nomeVariante = "Reno";
-
+        cont++;
+        Debug.Log("CONT:::"+cont);
         if (estado == SLOWSTART)
         {
             if (recebido == ACK && cwnd < ssthreshold)

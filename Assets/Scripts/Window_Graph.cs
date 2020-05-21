@@ -2,18 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Window_Graph : MonoBehaviour {
     [SerializeField] private Sprite circleSpriteTahoe;
     [SerializeField] private Sprite circleSpriteReno;
-    private RectTransform graphContainer; //onde inicia o grafico
-    private List<int> valueList = new List<int>();
+    [SerializeField]private RectTransform graphContainer; //onde inicia o grafico
+    [SerializeField]private List<int> valueList = new List<int>();
+    [SerializeField] private RectTransform background;
+    [SerializeField] private GameObject line;
+    [SerializeField] private RectTransform lineReference;
+    [SerializeField] private GameObject numberLine;
 
     public static Window_Graph instance;
 
     private void Awake() {
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
+        background = transform.Find("background").GetComponent<RectTransform>();
         instance = this;
+        CreateLinesGraph();
     }
 
     private GameObject CreateCircle(Vector2 anchoredPosition, string variant) {
@@ -42,7 +49,7 @@ public class Window_Graph : MonoBehaviour {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;
-
+        
         GameObject lastCircleGameObject = null;
         for (int i = 0; i < valueList.Count; i++) {
             float xPosition = xSize + i *xSize;
@@ -67,5 +74,54 @@ public class Window_Graph : MonoBehaviour {
         rectTransform.sizeDelta = new Vector2(distance, 1f);
         rectTransform.anchoredPosition = dotPositionA + dir * distance * .5f;
         rectTransform.localEulerAngles = new Vector3(0,0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg));
+    }
+
+    private void CreateLinesGraph()
+    {
+        GameObject linha = Instantiate(line) as GameObject;
+        linha.transform.SetParent(background, false);
+        float tax = 0.6f;
+        linha.transform.position = new Vector3(lineReference.position.x, lineReference.position.y, linha.transform.position.z);
+
+        int n = 0;
+        GameObject numb = Instantiate(numberLine) as GameObject;
+        numb.transform.SetParent(linha.transform, false);
+        numb.transform.position = new Vector3(linha.transform.position.x - 0.3f, linha.transform.position.y+0.2f, linha.transform.position.z);
+        TextMeshProUGUI number = numb.GetComponent<TextMeshProUGUI>();
+        number.text = n.ToString();
+
+        
+        for (int i = 1; i < 11; i++)
+        {
+            n += 20;
+            float pos = lineReference.position.y + tax;
+            linha = Instantiate(line) as GameObject;
+            linha.transform.SetParent(background, false);
+
+            linha.transform.position = new Vector3(lineReference.position.x, pos, linha.transform.position.z);
+
+            numb = Instantiate(numberLine) as GameObject;
+            numb.transform.SetParent(linha.transform, false);
+            numb.transform.position = new Vector3(linha.transform.position.x - 0.3f, linha.transform.position.y+0.2f, linha.transform.position.z);
+            number = numb.GetComponent<TextMeshProUGUI>();
+            number.text = n.ToString();
+
+            tax += 0.6f;
+        }
+
+    }
+
+    public void ClearDotsAndConection()
+    {
+        RectTransform[] dotsAndConections = graphContainer.GetComponentsInChildren<RectTransform>();
+
+        foreach (RectTransform rt in dotsAndConections)
+        {
+            if (!rt.gameObject.name.Equals("graphContainer"))
+            {
+                Destroy(rt.gameObject);
+            }
+            
+        }
     }
 }
