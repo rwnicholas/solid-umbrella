@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\TCP\Tcp.cs" />
     <Compile Include="Assets\Scripts\TCP\Tcp_Reno.cs" />
     <Compile Include="Assets\Scripts\TCP\Tcp_Tahoe.cs" />
+    <Compile Include="Assets\Scripts\Variant.cs" />
     <Compile Include="Assets\Scripts\Window_Graph.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />

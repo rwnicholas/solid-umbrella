@@ -12,9 +12,18 @@ public class Main : MonoBehaviour {
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
 
+    //UIs
     [SerializeField] private Sprite pauseImg, playImg;
     [SerializeField] private Button startBtn;
+    [SerializeField] private GameObject tahoeObj, renoObj;
 
+    //variants flags
+    [SerializeField] private bool tahoeOn = false;
+    [SerializeField]private bool renoOn = false;
+
+    //public bool TahoeOn { get => tahoeOn; }
+    //public bool RenoOn { get => renoOn;}
+    
     public void RunStart() {
         if (!started)
         {
@@ -38,20 +47,37 @@ public class Main : MonoBehaviour {
     }
 
     private void UpdateInterval() {
-        
-        var valor = tcp1.Run(recebido);
-        var valorReno = tcp2.Run(recebido);
+        var valorTahoe = 0; ;
+        var valorReno = 0;
 
+        if (tahoeOn)
+        {
+            valorTahoe = tcp1.Run(recebido);
+        }
+        if (renoOn)
+        {
+            valorReno = tcp2.Run(recebido);
+        }
         // o recebido eh resetado para que o grafico continue andando, ah nao ser que seja disparado um 
         // tout /tack novamente
         recebido = ACK;
 
-        valueListTahoe.Add(valor);
-        valueListReno.Add(valorReno);
-        Debug.Log("CWND:::::"+tcp1.Cwnd);
-        Window_Graph.instance.ShowGraph(valueListTahoe, tcp1.nomeVariante);
-        Window_Graph.instance.ShowGraph(valueListReno, tcp2.nomeVariante);
+        if (tahoeOn)
+        {
+            Debug.Log("CWND:::::" + tcp1.Cwnd);
+            valueListTahoe.Add(valorTahoe);
+            tahoeObj.GetComponent<Variant>().ChangeCWNDTax(tcp1.Cwnd.ToString());
+            tahoeObj.GetComponent<Variant>().ChangeCurrentState(tcp1.Estado);
+            Window_Graph.instance.ShowGraph(valueListTahoe, tcp1.nomeVariante);
+        }
 
+        if (renoOn)
+        {
+            valueListReno.Add(valorReno);
+            renoObj.GetComponent<Variant>().ChangeCWNDTax(tcp2.Cwnd.ToString());
+            renoObj.GetComponent<Variant>().ChangeCurrentState(tcp2.Estado);
+            Window_Graph.instance.ShowGraph(valueListReno, tcp2.nomeVariante);
+        }
     }
     
 
@@ -63,6 +89,18 @@ public class Main : MonoBehaviour {
         recebido = TACK;
     }
 
+    public void ResetTahoe()
+    {
+        valueListTahoe.Clear();
+        tcp1 = new Tcp_Tahoe(); //resetando o tcp (janela e sttresh)
+    }
+
+    public void ResetReno()
+    {
+        valueListReno.Clear();
+        tcp2 = new Tcp_Reno();
+    }
+
     public void Reset()
     {
         if (started)
@@ -71,11 +109,9 @@ public class Main : MonoBehaviour {
             changeButtonStart();
         }
         CancelInvoke("UpdateInterval");
-        valueListReno.Clear();
-        valueListTahoe.Clear();
-        tcp1 = new Tcp_Tahoe(); //resetando o tcp (janela e sttresh)
-        tcp2 = new Tcp_Reno();
 
+        ResetTahoe();
+        ResetReno();
         Window_Graph.instance.ClearDotsAndConection();
     }
 
@@ -87,6 +123,26 @@ public class Main : MonoBehaviour {
         } else
         {
             startBtn.GetComponent<Image>().sprite = playImg;
+        }
+    }
+
+    public void ChangeTahoe(bool value)
+    {
+        this.tahoeOn = value;
+
+        if (!tahoeOn)
+        {
+            ResetTahoe();
+        }
+    }
+
+    public void ChangeReno(bool value)
+    {
+        renoOn = value;
+
+        if (renoOn==false)
+        {
+            ResetReno();
         }
     }
 }
