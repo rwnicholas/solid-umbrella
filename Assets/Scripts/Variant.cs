@@ -45,6 +45,8 @@ public class Variant : MonoBehaviour
                 } else if (gameObject.name.Equals("reno".ToLower()))
                 {
                     Reno(false);
+                } else if (gameObject.name.Equals("cubic".ToLower())) {
+                    Cubic(false);
                 }
 
                 StartCoroutine(turnOffPanel());
@@ -70,6 +72,10 @@ public class Variant : MonoBehaviour
             Reno(true);
             StartCoroutine(turnOffToggle());
             panel.SetActive(true);
+        } else if (gameObject.name.Equals("cubic".ToLower())) {
+            Cubic(true);
+            StartCoroutine(turnOffToggle());
+            panel.SetActive(true);
         }
     }
 
@@ -83,6 +89,10 @@ public class Variant : MonoBehaviour
     {
         GameObject.Find("Manager").GetComponent<Main>().ChangeReno(value);
         
+    }
+
+    public void Cubic(bool value) {
+        GameObject.Find("Manager").GetComponent<Main>().ChangeCubic(value);
     }
 
     public void ChangeCWNDTax(string value)

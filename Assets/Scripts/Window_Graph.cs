@@ -7,6 +7,7 @@ using TMPro;
 public class Window_Graph : MonoBehaviour {
     [SerializeField] private Sprite circleSpriteTahoe;
     [SerializeField] private Sprite circleSpriteReno;
+    [SerializeField] private Sprite circlespriteCubic;
     [SerializeField]private RectTransform graphContainer; //onde inicia o grafico
     [SerializeField]private List<int> valueList = new List<int>();
     [SerializeField] private RectTransform background;
@@ -33,6 +34,8 @@ public class Window_Graph : MonoBehaviour {
         } else if (variant.ToLower().Equals("reno"))
         {
             gameObject.GetComponent<Image>().sprite = circleSpriteReno;
+        } else if (variant.ToLower().Equals("cubic")) {
+            gameObject.GetComponent<Image>().sprite = circlespriteCubic;
         }
 
         
@@ -45,7 +48,7 @@ public class Window_Graph : MonoBehaviour {
         return gameObject;
     }
 
-    public void ShowGraph(List<int> valueList, string variant) {
+    public void ShowGraph(List<float> valueList, string variant) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;

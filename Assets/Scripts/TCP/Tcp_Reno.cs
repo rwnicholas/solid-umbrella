@@ -8,7 +8,7 @@ public class Tcp_Reno : Tcp
     {
         Debug.Log(estado);
     }
-    public override int Run(string recebido)
+    public override float Run(string recebido)
     {
         nomeVariante = "Reno";
         cont++;

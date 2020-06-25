@@ -1,12 +1,12 @@
 public abstract class Tcp {
 	protected string estado { get; set;}
-	protected int cwnd { get; set;} //Janela de congestionamento
+	protected float cwnd { get; set;} //Janela de congestionamento
 	protected float ssthreshold { get; set;} //Limiar de partida lenta
 	protected string recebido { get; set;}
 	public string nomeVariante { get; set;} //nome da variante do tcp (tahoe, cubic, etc)
 	
 
-	public abstract int Run (string recebido);
+	public abstract float Run (string recebido);
 
 	protected Tcp() {
 		cwnd = 1;
@@ -20,7 +20,7 @@ public abstract class Tcp {
 		}
 	}
 
-	public int Cwnd {
+	public float Cwnd {
 		get {
 			return cwnd;
 		}

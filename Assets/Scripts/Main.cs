@@ -5,21 +5,24 @@ using UnityEngine.UI;
 using static ABRV.Abrv;
 
 public class Main : MonoBehaviour {
-    private List<int> valueListTahoe = new List<int>();
-    private List<int> valueListReno = new List<int>();
+    private List<float> valueListTahoe = new List<float>();
+    private List<float> valueListReno = new List<float>();
+    private List<float> valueListCubic = new List<float>();
     Tcp tcp1 = new Tcp_Tahoe();
     Tcp tcp2 = new Tcp_Reno();
+    Tcp tcp3 = new Tcp_Cubic();
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
 
     //UIs
     [SerializeField] private Sprite pauseImg, playImg;
     [SerializeField] private Button startBtn;
-    [SerializeField] private GameObject tahoeObj, renoObj;
+    [SerializeField] private GameObject tahoeObj, renoObj, cubicObj;
 
     //variants flags
     [SerializeField] private bool tahoeOn = false;
-    [SerializeField]private bool renoOn = false;
+    [SerializeField] private bool renoOn = false;
+    [SerializeField] private bool cubicOn = false;
 
     //public bool TahoeOn { get => tahoeOn; }
     //public bool RenoOn { get => renoOn;}
@@ -47,8 +50,9 @@ public class Main : MonoBehaviour {
     }
 
     private void UpdateInterval() {
-        var valorTahoe = 0; ;
-        var valorReno = 0;
+        float valorTahoe = 0; ;
+        float valorReno = 0;
+        float valorCubic = 0;
 
         if (tahoeOn)
         {
@@ -57,6 +61,9 @@ public class Main : MonoBehaviour {
         if (renoOn)
         {
             valorReno = tcp2.Run(recebido);
+        }
+        if (cubicOn) {
+            valorCubic = tcp3.Run(recebido);
         }
         // o recebido eh resetado para que o grafico continue andando, ah nao ser que seja disparado um 
         // tout /tack novamente
@@ -77,6 +84,13 @@ public class Main : MonoBehaviour {
             renoObj.GetComponent<Variant>().ChangeCWNDTax(tcp2.Cwnd.ToString());
             renoObj.GetComponent<Variant>().ChangeCurrentState(tcp2.Estado);
             Window_Graph.instance.ShowGraph(valueListReno, tcp2.nomeVariante);
+        }
+
+        if (cubicOn) {
+            valueListCubic.Add(valorCubic);
+            cubicObj.GetComponent<Variant>().ChangeCWNDTax(tcp3.Cwnd.ToString());
+            cubicObj.GetComponent<Variant>().ChangeCurrentState(tcp3.Estado);
+            Window_Graph.instance.ShowGraph(valueListCubic, tcp3.nomeVariante);
         }
     }
     
@@ -101,6 +115,11 @@ public class Main : MonoBehaviour {
         tcp2 = new Tcp_Reno();
     }
 
+    public void ResetCubic() {
+        valueListCubic.Clear();
+        tcp3 = new Tcp_Cubic();
+    }
+
     public void Reset()
     {
         if (started)
@@ -112,6 +131,7 @@ public class Main : MonoBehaviour {
 
         ResetTahoe();
         ResetReno();
+        ResetCubic();
         Window_Graph.instance.ClearDotsAndConection();
     }
 
@@ -143,6 +163,14 @@ public class Main : MonoBehaviour {
         if (renoOn==false)
         {
             ResetReno();
+        }
+    }
+
+    public void ChangeCubic(bool value) {
+        cubicOn = value;
+
+        if (cubicOn == false) {
+            ResetCubic();
         }
     }
 }

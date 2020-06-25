@@ -5,7 +5,7 @@ public class Tcp_Tahoe : Tcp {
 	public Tcp_Tahoe (){
 		Debug.Log(estado);
 	}
-	public override int Run (string recebido){
+	public override float Run (string recebido){
 		nomeVariante = "Tahoe";
 		//RTT -> Tempo medido desde o envio de um pacote até a chegada 
 		//       da confirmação do recebimento do mesmo
