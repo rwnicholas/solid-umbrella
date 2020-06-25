@@ -26,7 +26,12 @@ public class Main : MonoBehaviour {
 
     //public bool TahoeOn { get => tahoeOn; }
     //public bool RenoOn { get => renoOn;}
-    
+    public const float graphicLimit_y = 100;
+    public bool limitReached_y = false;
+    private string recebidoTahoeLimit;
+    private string recebidoRenoLimit;
+    private string recebidoCubicLimit;
+
     public void RunStart() {
         if (!started)
         {
@@ -56,18 +61,47 @@ public class Main : MonoBehaviour {
 
         if (tahoeOn)
         {
-            valorTahoe = tcp1.Run(recebido);
+            if(limitReached_y) {
+                valorTahoe = tcp1.Run(recebidoTahoeLimit);
+            } else {
+                valorTahoe = tcp1.Run(recebido);
+            }
         }
         if (renoOn)
         {
-            valorReno = tcp2.Run(recebido);
+            if (limitReached_y) {
+                valorReno = tcp2.Run(recebidoRenoLimit);
+            } else {
+                valorReno = tcp2.Run(recebido);
+            }
         }
         if (cubicOn) {
-            valorCubic = tcp3.Run(recebido);
+            if (limitReached_y) {
+                valorCubic = tcp3.Run(recebidoCubicLimit);
+            } else {
+                valorCubic = tcp3.Run(recebido);
+            }
         }
         // o recebido eh resetado para que o grafico continue andando, ah nao ser que seja disparado um 
         // tout /tack novamente
         recebido = ACK;
+        limitReached_y = false;
+        recebidoTahoeLimit = recebidoRenoLimit = recebidoCubicLimit = ACK;
+
+        if (valorTahoe >= graphicLimit_y) {
+            limitReached_y = true;
+            recebidoTahoeLimit = TACK;
+        }
+        
+        if (valorReno >= graphicLimit_y) {
+            limitReached_y = true;
+            recebidoRenoLimit = TACK;
+        }
+
+        if (valorCubic >= graphicLimit_y) {
+            limitReached_y = true;
+            recebidoCubicLimit = TACK;
+        }
 
         if (tahoeOn)
         {
