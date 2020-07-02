@@ -13,13 +13,15 @@ public class Tcp_Tahoe : Tcp {
 		if (estado == SLOWSTART) {
 			if (recebido == ACK && cwnd < ssthreshold) {
 				cwnd++;
+                estado = SLOWSTART;
 			} else if (recebido == TOUT) {
-				ssthreshold = cwnd/2;
+				ssthreshold = Mathf.Round(cwnd / 2);
 				cwnd = 1;
-				Debug.Log("Houve TOUT");
+                estado = SLOWSTART;
 			} else if (recebido == TACK) {
-				ssthreshold = cwnd/2;
+				ssthreshold = Mathf.Round(cwnd / 2);
 				cwnd = 1;
+                estado = SLOWSTART;
 			} else if (recebido == ACK && cwnd >= ssthreshold) {
 				cwnd+=3;
 				estado = C_AVOIDENCE;
@@ -27,12 +29,13 @@ public class Tcp_Tahoe : Tcp {
 		} else if (estado == C_AVOIDENCE) {
 			if (recebido == ACK) {
 				cwnd+=3;
+                estado = C_AVOIDENCE;
 			} else if (recebido == TOUT) {
-				ssthreshold = cwnd/2;
+				ssthreshold = Mathf.Round(cwnd / 2);
 				cwnd = 1;
 				estado = SLOWSTART;
 			} else if (recebido == TACK) {
-				ssthreshold = cwnd/2;
+				ssthreshold = Mathf.Round(cwnd / 2);
 				cwnd = 1;
 				estado = SLOWSTART;
 			}

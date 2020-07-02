@@ -18,16 +18,18 @@ public class Tcp_Reno : Tcp
             if (recebido == ACK && cwnd < ssthreshold)
             {
                 cwnd++;
+                estado = SLOWSTART;
             }
             else if (recebido == TOUT)
             {
+                ssthreshold = Mathf.Round(cwnd / 2);                
                 cwnd = 1;
-                ssthreshold = cwnd / 2;                
+                estado = SLOWSTART;
             }
             else if (recebido == TACK)
             {
-                ssthreshold = cwnd / 2;
-                cwnd = (cwnd/2)+3;
+                ssthreshold = Mathf.Round(cwnd / 2);
+                cwnd = Mathf.Round((cwnd / 2) + 3);
                 estado = C_AVOIDENCE;
             }
             else if (recebido == ACK && cwnd >= ssthreshold)
@@ -41,17 +43,19 @@ public class Tcp_Reno : Tcp
             if (recebido == ACK)
             {
                 cwnd += 3;
+                estado = C_AVOIDENCE;
             }
             else if (recebido == TOUT)
             {
+                ssthreshold = Mathf.Round(cwnd / 2);
                 cwnd = 1;
-                ssthreshold = cwnd / 2;
                 estado = SLOWSTART;
             }
             else if (recebido == TACK)
             {
-                ssthreshold = cwnd / 2;
-                cwnd = (cwnd / 2) + 3;
+                ssthreshold = Mathf.Round(cwnd / 2);
+                cwnd = Mathf.Round((cwnd / 2) + 3);
+                estado = C_AVOIDENCE;
             }
         }
         return cwnd;
