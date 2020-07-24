@@ -49,6 +49,11 @@ namespace TCP_Variant_Tahoe
             }
             return cwnd;
         }
+
+        public override TCP Init() {
+
+            return new TahoeVariantTCP();
+        }
     }
 }
 

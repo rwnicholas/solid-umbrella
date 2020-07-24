@@ -50,5 +50,9 @@ namespace TCP_Variant_Reno
             }
             return cwnd;
         }
+
+        public override TCP Init() {
+            return new RenoVariantTCP();
+        }
     }
 }

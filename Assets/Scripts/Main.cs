@@ -14,6 +14,7 @@ public class Main : MonoBehaviour {
     private List<float> valueListTcp2 = new List<float>();
     private List<float> valueListTcp3 = new List<float>();
     TCP tcp1, tcp2, tcp3;
+    TCP tcp1Default, tcp2Default, tcp3Default;
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
 
@@ -37,17 +38,35 @@ public class Main : MonoBehaviour {
 
     public void Start() {
         print(Application.dataPath);
-        string[] Assemblys[] = Directory.GetFiles(Application.dataPath + "TCPs", "TCP_Variant_*.dll");
-        int AssemblyNumber = Directory.GetFiles(Application.dataPath + "TCPs", "TCP_Variant_*.dll").Length;
-
+        string[] Assemblys = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll");
+        int AssemblyNumber = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll").Length;
+        Assembly[] DLL = new Assembly[AssemblyNumber];
         for (int i = 0; i < AssemblyNumber && i < 3; i++) {
-            Assembly.LoadFile(Assemblys[i]);
+            DLL[i] = Assembly.LoadFile(Assemblys[i]);
         }
 
 
-        tcp1 = new tcp();
-        tcp2 = new RenoVariantTCP();
-        tcp3 = new CubicVariantTCP();
+        for (int i = 0; i < AssemblyNumber; i++) {
+            foreach(Type type in DLL[i].GetExportedTypes()) {
+                if (i == 0) {
+                    var c = Activator.CreateInstance(type);
+                    type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
+                    tcp1 = (TCP)c;
+                    
+                }else if (i == 1) {
+                    var c = Activator.CreateInstance(type);
+                    type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
+                    tcp2 = (TCP)c;
+
+                }else if (i == 2) {
+                    var c = Activator.CreateInstance(type);
+                    type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
+                    tcp3 = (TCP)c;
+
+                }
+            }
+        }
+
         foreach (var child in GameObject.FindGameObjectsWithTag("tcpName1")) {
             child.GetComponent<TMPro.TextMeshProUGUI>().text = tcp1.nomeVariante;
         }
@@ -166,18 +185,21 @@ public class Main : MonoBehaviour {
     public void ResetTcp1()
     {
         valueListTcp1.Clear();
-        tcp1 = new TahoeVariantTCP(); //resetando o tcp (janela e sttresh)
+        tcp1 = tcp1.Init();
+        //tcp1 = new TahoeVariantTCP(); //resetando o tcp (janela e sttresh)
     }
 
     public void ResetTcp2()
     {
         valueListTcp2.Clear();
-        tcp2 = new RenoVariantTCP();
+        tcp2 = tcp2.Init();
+        //tcp2 = new RenoVariantTCP();
     }
 
     public void ResetTcp3() {
         valueListTcp3.Clear();
-        tcp3 = new CubicVariantTCP();
+        tcp3 = tcp3.Init();
+        //tcp3 = new CubicVariantTCP();
     }
 
     public void Reset()

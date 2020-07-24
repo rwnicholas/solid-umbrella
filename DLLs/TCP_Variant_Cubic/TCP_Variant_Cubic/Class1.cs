@@ -120,5 +120,9 @@ namespace TCP_Variant_Cubic
             }
             return cwnd;
         }
+
+        public override TCP Init() {
+            return new CubicVariantTCP();
+        }
     }
 }

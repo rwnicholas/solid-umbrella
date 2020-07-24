@@ -9,3 +9,13 @@ C:\Users\nicho\Documents\Projects\TCP_Interface\TCP_Interface\obj\Release\TCP_In
 C:\Users\nicho\Documents\Projects\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.csproj.CopyComplete
 C:\Users\nicho\Documents\Projects\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.dll
 C:\Users\nicho\Documents\Projects\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.pdb
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\bin\Release\TCP_Interface.dll
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\bin\Release\TCP_Interface.pdb
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\bin\Release\AbreviacoesTCP.dll
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\bin\Release\AbreviacoesTCP.pdb
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\bin\Release\UnityEngine.xml
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.csprojAssemblyReference.cache
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.csproj.CoreCompileInputs.cache
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.csproj.CopyComplete
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.dll
+C:\Users\nicho\Documents\Projects\solid-umbrella\DLLs\TCP_Interface\TCP_Interface\obj\Release\TCP_Interface.pdb

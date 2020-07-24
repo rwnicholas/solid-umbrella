@@ -16,6 +16,7 @@ namespace TCP_Interface
 
 
         public abstract float Run(string recebido);
+        public abstract TCP Init();
 
         protected TCP() {
             cwnd = 1;
@@ -34,5 +35,10 @@ namespace TCP_Interface
                 return cwnd;
             }
         }
+
+        public TCP ShallowCopy() {
+            return (TCP)this.MemberwiseClone();
+        }
+
     }
 }
