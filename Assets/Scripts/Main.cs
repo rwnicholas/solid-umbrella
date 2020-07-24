@@ -2,41 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ABRV.Abrv;
+using AbreviacoesTCP;
+using TCP_Interface;
+using TCP_Variant_Tahoe;
+using TCP_Variant_Reno;
+using TCP_Variant_Cubic;
 
 public class Main : MonoBehaviour {
-    private List<float> valueListTahoe = new List<float>();
-    private List<float> valueListReno = new List<float>();
-    private List<float> valueListCubic = new List<float>();
-    Tcp tcp1 = new Tcp_Tahoe();
-    Tcp tcp2 = new Tcp_Reno();
-    Tcp tcp3 = new Tcp_Cubic();
+    private List<float> valueListTcp1 = new List<float>();
+    private List<float> valueListTcp2 = new List<float>();
+    private List<float> valueListTcp3 = new List<float>();
+    TCP tcp1 = new TahoeVariantTCP();
+    TCP tcp2 = new RenoVariantTCP();
+    TCP tcp3 = new CubicVariantTCP();
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
 
     //UIs
     [SerializeField] private Sprite pauseImg, playImg;
     [SerializeField] private Button startBtn;
-    [SerializeField] private GameObject tahoeObj, renoObj, cubicObj;
+    [SerializeField] private GameObject tcp1Obj, tcp2Obj, tcp3Obj;
 
     //variants flags
-    [SerializeField] private bool tahoeOn = false;
-    [SerializeField] private bool renoOn = false;
-    [SerializeField] private bool cubicOn = false;
+    [SerializeField] private bool tcp1On = false; 
+    [SerializeField] private bool tcp2On = false;
+    [SerializeField] private bool tcp3On = false;
 
-    //public bool TahoeOn { get => tahoeOn; }
-    //public bool RenoOn { get => renoOn;}
+    //public bool TahoeOn { get => tcp1On; }
+    //public bool RenoOn { get => tcp2On;}
     public const float graphicLimit_y = 100;
     public bool limitReached_y = false;
-    private string recebidoTahoeLimit;
-    private string recebidoRenoLimit;
-    private string recebidoCubicLimit;
+    private string recebidoTcp1Limit;
+    private string recebidoTcp2Limit;
+    private string recebidoTcp3Limit;
 
     public void RunStart() {
         if (!started)
         {
             float updateInterval = 0.5f;
-            recebido = ACK;
+            recebido = Abrv.ACK;
             InvokeRepeating("UpdateInterval", updateInterval, updateInterval); //invoca o metodo com o nome selecionado nos tempo definido e fica repetindo a invocacao a cada tempo definido para isso 
 
             started = true;
@@ -55,103 +59,103 @@ public class Main : MonoBehaviour {
     }
 
     private void UpdateInterval() {
-        float valorTahoe = 0; ;
-        float valorReno = 0;
-        float valorCubic = 0;
+        float valorTcp1 = 0; ;
+        float valorTcp2 = 0;
+        float valorTcp3 = 0;
 
-        if (tahoeOn)
+        if (tcp1On)
         {
             if(limitReached_y) {
-                valorTahoe = tcp1.Run(recebidoTahoeLimit);
+                valorTcp1 = tcp1.Run(recebidoTcp1Limit);
             } else {
-                valorTahoe = tcp1.Run(recebido);
+                valorTcp1 = tcp1.Run(recebido);
             }
         }
-        if (renoOn)
+        if (tcp2On)
         {
             if (limitReached_y) {
-                valorReno = tcp2.Run(recebidoRenoLimit);
+                valorTcp2 = tcp2.Run(recebidoTcp2Limit);
             } else {
-                valorReno = tcp2.Run(recebido);
+                valorTcp2 = tcp2.Run(recebido);
             }
         }
-        if (cubicOn) {
+        if (tcp3On) {
             if (limitReached_y) {
-                valorCubic = tcp3.Run(recebidoCubicLimit);
+                valorTcp3 = tcp3.Run(recebidoTcp3Limit);
             } else {
-                valorCubic = tcp3.Run(recebido);
+                valorTcp3 = tcp3.Run(recebido);
             }
         }
         // o recebido eh resetado para que o grafico continue andando, ah nao ser que seja disparado um 
         // tout /tack novamente
-        recebido = ACK;
+        recebido = Abrv.ACK;
         limitReached_y = false;
-        recebidoTahoeLimit = recebidoRenoLimit = recebidoCubicLimit = ACK;
+        recebidoTcp1Limit = recebidoTcp2Limit = recebidoTcp3Limit = Abrv.ACK;
 
-        if (valorTahoe >= graphicLimit_y) {
+        if (valorTcp1 >= graphicLimit_y) {
             limitReached_y = true;
-            recebidoTahoeLimit = TACK;
+            recebidoTcp1Limit = Abrv.TACK;
         }
         
-        if (valorReno >= graphicLimit_y) {
+        if (valorTcp2 >= graphicLimit_y) {
             limitReached_y = true;
-            recebidoRenoLimit = TACK;
+            recebidoTcp2Limit = Abrv.TACK;
         }
 
-        if (valorCubic >= graphicLimit_y) {
+        if (valorTcp3 >= graphicLimit_y) {
             limitReached_y = true;
-            recebidoCubicLimit = TACK;
+            recebidoTcp3Limit = Abrv.TACK;
         }
 
-        if (tahoeOn)
+        if (tcp1On)
         {
             Debug.Log("CWND:::::" + tcp1.Cwnd);
-            valueListTahoe.Add(valorTahoe);
-            tahoeObj.GetComponent<Variant>().ChangeCWNDTax(tcp1.Cwnd.ToString());
-            tahoeObj.GetComponent<Variant>().ChangeCurrentState(tcp1.Estado);
-            Window_Graph.instance.ShowGraph(valueListTahoe, tcp1.nomeVariante);
+            valueListTcp1.Add(valorTcp1);
+            tcp1Obj.GetComponent<Variant>().ChangeCWNDTax(tcp1.Cwnd.ToString());
+            tcp1Obj.GetComponent<Variant>().ChangeCurrentState(tcp1.Estado);
+            Window_Graph.instance.ShowGraph(valueListTcp1, "tcp1");
         }
 
-        if (renoOn)
+        if (tcp2On)
         {
-            valueListReno.Add(valorReno);
-            renoObj.GetComponent<Variant>().ChangeCWNDTax(tcp2.Cwnd.ToString());
-            renoObj.GetComponent<Variant>().ChangeCurrentState(tcp2.Estado);
-            Window_Graph.instance.ShowGraph(valueListReno, tcp2.nomeVariante);
+            valueListTcp2.Add(valorTcp2);
+            tcp2Obj.GetComponent<Variant>().ChangeCWNDTax(tcp2.Cwnd.ToString());
+            tcp2Obj.GetComponent<Variant>().ChangeCurrentState(tcp2.Estado);
+            Window_Graph.instance.ShowGraph(valueListTcp2, "tcp2");
         }
 
-        if (cubicOn) {
-            valueListCubic.Add(valorCubic);
-            cubicObj.GetComponent<Variant>().ChangeCWNDTax(tcp3.Cwnd.ToString());
-            cubicObj.GetComponent<Variant>().ChangeCurrentState(tcp3.Estado);
-            Window_Graph.instance.ShowGraph(valueListCubic, tcp3.nomeVariante);
+        if (tcp3On) {
+            valueListTcp3.Add(valorTcp3);
+            tcp3Obj.GetComponent<Variant>().ChangeCWNDTax(tcp3.Cwnd.ToString());
+            tcp3Obj.GetComponent<Variant>().ChangeCurrentState(tcp3.Estado);
+            Window_Graph.instance.ShowGraph(valueListTcp3, "tcp3");
         }
     }
     
 
     public void timeout() {
-        recebido = TOUT;
+        recebido = Abrv.TOUT;
     }
 
     public void tack() {
-        recebido = TACK;
+        recebido = Abrv.TACK;
     }
 
-    public void ResetTahoe()
+    public void ResetTcp1()
     {
-        valueListTahoe.Clear();
-        tcp1 = new Tcp_Tahoe(); //resetando o tcp (janela e sttresh)
+        valueListTcp1.Clear();
+        tcp1 = new TahoeVariantTCP(); //resetando o tcp (janela e sttresh)
     }
 
-    public void ResetReno()
+    public void ResetTcp2()
     {
-        valueListReno.Clear();
-        tcp2 = new Tcp_Reno();
+        valueListTcp2.Clear();
+        tcp2 = new RenoVariantTCP();
     }
 
-    public void ResetCubic() {
-        valueListCubic.Clear();
-        tcp3 = new Tcp_Cubic();
+    public void ResetTcp3() {
+        valueListTcp3.Clear();
+        tcp3 = new CubicVariantTCP();
     }
 
     public void Reset()
@@ -163,9 +167,9 @@ public class Main : MonoBehaviour {
         }
         CancelInvoke("UpdateInterval");
 
-        ResetTahoe();
-        ResetReno();
-        ResetCubic();
+        ResetTcp1();
+        ResetTcp2();
+        ResetTcp3();
         Window_Graph.instance.ClearDotsAndConection();
     }
 
@@ -180,31 +184,31 @@ public class Main : MonoBehaviour {
         }
     }
 
-    public void ChangeTahoe(bool value)
+    public void ChangeTcp1(bool value)
     {
-        this.tahoeOn = value;
+        this.tcp1On = value;
 
-        if (!tahoeOn)
+        if (!tcp1On)
         {
-            ResetTahoe();
+            ResetTcp1();
         }
     }
 
-    public void ChangeReno(bool value)
+    public void ChangeTcp2(bool value)
     {
-        renoOn = value;
+        tcp2On = value;
 
-        if (renoOn==false)
+        if (tcp2On==false)
         {
-            ResetReno();
+            ResetTcp2();
         }
     }
 
-    public void ChangeCubic(bool value) {
-        cubicOn = value;
+    public void ChangeTcp3(bool value) {
+        tcp3On = value;
 
-        if (cubicOn == false) {
-            ResetCubic();
+        if (tcp3On == false) {
+            ResetTcp3();
         }
     }
 }

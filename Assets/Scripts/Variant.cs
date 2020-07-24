@@ -38,15 +38,15 @@ public class Variant : MonoBehaviour
             {
                 toggle.isOn = false;
 
-                if (gameObject.name.Equals("tahoe".ToLower()))
+                if (gameObject.name.Equals("tcp1".ToLower()))
                 {
-                    Tahoe(false);
+                    Tcp1(false);
                     print("entrou***********************0");
-                } else if (gameObject.name.Equals("reno".ToLower()))
+                } else if (gameObject.name.Equals("tcp2".ToLower()))
                 {
-                    Reno(false);
-                } else if (gameObject.name.Equals("cubic".ToLower())) {
-                    Cubic(false);
+                    Tcp2(false);
+                } else if (gameObject.name.Equals("tcp3".ToLower())) {
+                    Tcp3(false);
                 }
 
                 StartCoroutine(turnOffPanel());
@@ -61,38 +61,38 @@ public class Variant : MonoBehaviour
 
     private void Choose()
     {
-        if (gameObject.name.Equals("tahoe".ToLower()))
+        if (gameObject.name.Equals("tcp1".ToLower()))
         {
-            Tahoe(true);
+            Tcp1(true);
             StartCoroutine(turnOffToggle());
             panel.SetActive(true);
         }
-        else if (gameObject.name.Equals("reno".ToLower()))
+        else if (gameObject.name.Equals("tcp2".ToLower()))
         {
-            Reno(true);
+            Tcp2(true);
             StartCoroutine(turnOffToggle());
             panel.SetActive(true);
-        } else if (gameObject.name.Equals("cubic".ToLower())) {
-            Cubic(true);
+        } else if (gameObject.name.Equals("tcp3".ToLower())) {
+            Tcp3(true);
             StartCoroutine(turnOffToggle());
             panel.SetActive(true);
         }
     }
 
-    public void Tahoe(bool value)
+    public void Tcp1(bool value)
     {
-        GameObject.Find("Manager").GetComponent<Main>().ChangeTahoe(value);
+        GameObject.Find("Manager").GetComponent<Main>().ChangeTcp1(value);
         
     }
 
-    public void Reno(bool value)
+    public void Tcp2(bool value)
     {
-        GameObject.Find("Manager").GetComponent<Main>().ChangeReno(value);
+        GameObject.Find("Manager").GetComponent<Main>().ChangeTcp2(value);
         
     }
 
-    public void Cubic(bool value) {
-        GameObject.Find("Manager").GetComponent<Main>().ChangeCubic(value);
+    public void Tcp3(bool value) {
+        GameObject.Find("Manager").GetComponent<Main>().ChangeTcp3(value);
     }
 
     public void ChangeCWNDTax(string value)

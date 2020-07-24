@@ -408,12 +408,13 @@ MonoBehaviour:
   pauseImg: {fileID: 21300000, guid: c1bc1f877fb4192449b2dc9acc279134, type: 3}
   playImg: {fileID: 21300000, guid: 2b21ddae0ed22724db3aab08bce7e0e7, type: 3}
   startBtn: {fileID: 1878531507}
-  tahoeObj: {fileID: 325372741}
-  renoObj: {fileID: 2057072177}
-  cubicObj: {fileID: 241479204}
-  tahoeOn: 0
-  renoOn: 0
-  cubicOn: 0
+  tcp1Obj: {fileID: 325372741}
+  tcp2Obj: {fileID: 2057072177}
+  tcp3Obj: {fileID: 241479204}
+  tcp1On: 0
+  tcp2On: 0
+  tcp3On: 0
+  limitReached_y: 0
 --- !u!4 &163217411
 Transform:
   m_ObjectHideFlags: 0
@@ -580,7 +581,7 @@ GameObject:
   - component: {fileID: 241479205}
   - component: {fileID: 241479206}
   m_Layer: 5
-  m_Name: cubic
+  m_Name: tcp3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -708,7 +709,7 @@ GameObject:
   - component: {fileID: 325372742}
   - component: {fileID: 325372743}
   m_Layer: 5
-  m_Name: tahoe
+  m_Name: tcp1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2030,7 +2031,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CUBIC
+  m_text: TCP3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2099,7 +2100,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 674025716}
-    characterCount: 5
+    characterCount: 4
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -2182,9 +2183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecb6418b8fa1ce98d8a307cc6bc5888b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleSpriteTahoe: {fileID: 21300000, guid: a7fce92cab9049998963daa74212afc0, type: 3}
-  circleSpriteReno: {fileID: 21300000, guid: b9eb4ff52adff9147805cf5471314f7b, type: 3}
-  circlespriteCubic: {fileID: 21300000, guid: 04eec994b0b8fb24cbed2e7bd612fb71, type: 3}
+  circleSpriteTcp1: {fileID: 21300000, guid: a7fce92cab9049998963daa74212afc0, type: 3}
+  circleSpriteTcp2: {fileID: 21300000, guid: b9eb4ff52adff9147805cf5471314f7b, type: 3}
+  circlespriteTcp3: {fileID: 21300000, guid: 04eec994b0b8fb24cbed2e7bd612fb71, type: 3}
   graphContainer: {fileID: 0}
   valueList: 
   background: {fileID: 1876100588}
@@ -5169,7 +5170,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Tahoe
+  m_text: Tcp1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5238,7 +5239,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1297931831}
-    characterCount: 5
+    characterCount: 4
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -5324,7 +5325,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TAHOE
+  m_text: TCP1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5393,7 +5394,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1321244349}
-    characterCount: 5
+    characterCount: 4
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -5706,7 +5707,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Cubic
+  m_text: Tcp3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5775,7 +5776,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1505272984}
-    characterCount: 5
+    characterCount: 4
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -7289,7 +7290,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Reno
+  m_text: Tcp2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7444,7 +7445,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: RENO
+  m_text: TCP2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7555,7 +7556,7 @@ GameObject:
   - component: {fileID: 2057072178}
   - component: {fileID: 2057072179}
   m_Layer: 5
-  m_Name: reno
+  m_Name: tcp2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

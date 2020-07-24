@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 
 public class Window_Graph : MonoBehaviour {
-    [SerializeField] private Sprite circleSpriteTahoe;
-    [SerializeField] private Sprite circleSpriteReno;
-    [SerializeField] private Sprite circlespriteCubic;
+    [SerializeField] private Sprite circleSpriteTcp1;
+    [SerializeField] private Sprite circleSpriteTcp2;
+    [SerializeField] private Sprite circlespriteTcp3;
     [SerializeField]private RectTransform graphContainer; //onde inicia o grafico
     [SerializeField]private List<int> valueList = new List<int>();
     [SerializeField] private RectTransform background;
@@ -28,14 +28,14 @@ public class Window_Graph : MonoBehaviour {
         GameObject gameObject = new GameObject("circle", typeof(Image));
         gameObject.transform.SetParent(graphContainer, false);
 
-        if (variant.ToLower().Equals("tahoe"))
+        if (variant.ToLower().Equals("tcp1"))
         {
-            gameObject.GetComponent<Image>().sprite = circleSpriteTahoe;
-        } else if (variant.ToLower().Equals("reno"))
+            gameObject.GetComponent<Image>().sprite = circleSpriteTcp1;
+        } else if (variant.ToLower().Equals("tcp2"))
         {
-            gameObject.GetComponent<Image>().sprite = circleSpriteReno;
-        } else if (variant.ToLower().Equals("cubic")) {
-            gameObject.GetComponent<Image>().sprite = circlespriteCubic;
+            gameObject.GetComponent<Image>().sprite = circleSpriteTcp2;
+        } else if (variant.ToLower().Equals("tcp3")) {
+            gameObject.GetComponent<Image>().sprite = circlespriteTcp3;
         }
 
         
