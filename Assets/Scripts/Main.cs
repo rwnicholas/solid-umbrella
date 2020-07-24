@@ -1,20 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using AbreviacoesTCP;
 using TCP_Interface;
-using TCP_Variant_Tahoe;
-using TCP_Variant_Reno;
-using TCP_Variant_Cubic;
+
 
 public class Main : MonoBehaviour {
     private List<float> valueListTcp1 = new List<float>();
     private List<float> valueListTcp2 = new List<float>();
     private List<float> valueListTcp3 = new List<float>();
-    TCP tcp1 = new TahoeVariantTCP();
-    TCP tcp2 = new RenoVariantTCP();
-    TCP tcp3 = new CubicVariantTCP();
+    TCP tcp1, tcp2, tcp3;
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
 
@@ -35,6 +34,30 @@ public class Main : MonoBehaviour {
     private string recebidoTcp1Limit;
     private string recebidoTcp2Limit;
     private string recebidoTcp3Limit;
+
+    public void Start() {
+        print(Application.dataPath);
+        string[] Assemblys[] = Directory.GetFiles(Application.dataPath + "TCPs", "TCP_Variant_*.dll");
+        int AssemblyNumber = Directory.GetFiles(Application.dataPath + "TCPs", "TCP_Variant_*.dll").Length;
+
+        for (int i = 0; i < AssemblyNumber && i < 3; i++) {
+            Assembly.LoadFile(Assemblys[i]);
+        }
+
+
+        tcp1 = new tcp();
+        tcp2 = new RenoVariantTCP();
+        tcp3 = new CubicVariantTCP();
+        foreach (var child in GameObject.FindGameObjectsWithTag("tcpName1")) {
+            child.GetComponent<TMPro.TextMeshProUGUI>().text = tcp1.nomeVariante;
+        }
+        foreach (var child in GameObject.FindGameObjectsWithTag("tcpName2")) {
+            child.GetComponent<TMPro.TextMeshProUGUI>().text = tcp2.nomeVariante;
+        }
+        foreach (var child in GameObject.FindGameObjectsWithTag("tcpName3")) {
+            child.GetComponent<TMPro.TextMeshProUGUI>().text = tcp3.nomeVariante;
+        }
+    }
 
     public void RunStart() {
         if (!started)
@@ -131,7 +154,6 @@ public class Main : MonoBehaviour {
             Window_Graph.instance.ShowGraph(valueListTcp3, "tcp3");
         }
     }
-    
 
     public void timeout() {
         recebido = Abrv.TOUT;
