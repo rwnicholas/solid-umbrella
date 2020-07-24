@@ -1,0 +1,12 @@
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\TCP_Variant_Reno.dll
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\TCP_Variant_Reno.pdb
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\AbreviacoesTCP.dll
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\TCP_Interface.dll
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\UnityEngine.dll
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\AbreviacoesTCP.pdb
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\TCP_Interface.pdb
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\bin\Release\UnityEngine.xml
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\obj\Release\TCP_Variant_Reno.csproj.CoreCompileInputs.cache
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\obj\Release\TCP_Variant_Reno.csproj.CopyComplete
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\obj\Release\TCP_Variant_Reno.dll
+C:\Users\nicho\Documents\Projects\TCP_Variant_Reno\TCP_Variant_Reno\obj\Release\TCP_Variant_Reno.pdb

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1209
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP_Variant_Tahoe", "TCP_Tahoe\TCP_Variant_Tahoe.csproj", "{3EE4463C-B2CA-471B-BBD1-E85976C37852}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EE4463C-B2CA-471B-BBD1-E85976C37852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EE4463C-B2CA-471B-BBD1-E85976C37852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EE4463C-B2CA-471B-BBD1-E85976C37852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EE4463C-B2CA-471B-BBD1-E85976C37852}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5CBC7E1E-61E4-4C74-845A-A9D1B41BA6E9}
+	EndGlobalSection
+EndGlobal
