@@ -7,75 +7,83 @@ using UnityEngine;
 using UnityEngine.UI;
 using AbreviacoesTCP;
 using TCP_Interface;
-
+using Random = UnityEngine.Random;
 
 public class Main : MonoBehaviour {
-    private List<float> valueListTcp1 = new List<float>();
-    private List<float> valueListTcp2 = new List<float>();
-    private List<float> valueListTcp3 = new List<float>();
-    TCP tcp1, tcp2, tcp3;
-    TCP tcp1Default, tcp2Default, tcp3Default;
+    private List<List<float>> valuesList = new List<List<float>>();
+    List<TCP> tcps = new List<TCP>();
+    List<bool> tcpsToggleStates = new List<bool>();
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
 
     //UIs
     [SerializeField] private Sprite pauseImg, playImg;
     [SerializeField] private Button startBtn;
-    [SerializeField] private GameObject tcp1Obj, tcp2Obj, tcp3Obj;
-
-    //variants flags
-    [SerializeField] private bool tcp1On = false; 
-    [SerializeField] private bool tcp2On = false;
-    [SerializeField] private bool tcp3On = false;
-
-    //public bool TahoeOn { get => tcp1On; }
-    //public bool RenoOn { get => tcp2On;}
+    [SerializeField] private List<GameObject> tcpsObjects;
+    [SerializeField] private RectTransform contentTCPsScrollView;
+    [SerializeField] private GameObject tcpInformationPanelPrefab;
+    [SerializeField] private List<Color> tcpColors = new List<Color>();
+    
     public const float graphicLimit_y = 100;
     public bool limitReached_y = false;
-    private string recebidoTcp1Limit;
-    private string recebidoTcp2Limit;
-    private string recebidoTcp3Limit;
+    List<string> listRecebidosTcpLimit = new List<string>();
 
     public void Start() {
         print(Application.dataPath);
         string[] Assemblys = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll");
         int AssemblyNumber = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll").Length;
         Assembly[] DLL = new Assembly[AssemblyNumber];
-        for (int i = 0; i < AssemblyNumber && i < 3; i++) {
+        for (int i = 0; i < AssemblyNumber; i++) {
             DLL[i] = Assembly.LoadFile(Assemblys[i]);
         }
 
 
         for (int i = 0; i < AssemblyNumber; i++) {
             foreach(Type type in DLL[i].GetExportedTypes()) {
-                if (i == 0) {
-                    var c = Activator.CreateInstance(type);
-                    type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
-                    tcp1 = (TCP)c;
-                    
-                }else if (i == 1) {
-                    var c = Activator.CreateInstance(type);
-                    type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
-                    tcp2 = (TCP)c;
+                var c = Activator.CreateInstance(type);
+                type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
+                TCP tcp = (TCP)c;
 
-                }else if (i == 2) {
-                    var c = Activator.CreateInstance(type);
-                    type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
-                    tcp3 = (TCP)c;
-
-                }
+                //criacao das listas
+                tcps.Add(tcp);
+                tcpsToggleStates.Add(false); //adicionando o estado do toggle de cada um q sera identificado pelo indice
+                listRecebidosTcpLimit.Add("");
+                valuesList.Add(new List<float>());
+                
             }
         }
 
-        foreach (var child in GameObject.FindGameObjectsWithTag("tcpName1")) {
-            child.GetComponent<TMPro.TextMeshProUGUI>().text = tcp1.nomeVariante;
+        for(int j=0; j < tcps.Count; j++)
+        {
+            GameObject tcpInforPrefab = Instantiate(tcpInformationPanelPrefab);
+            tcpInforPrefab.name = tcps[j].nomeVariante;
+            tcpInforPrefab.transform.SetParent(contentTCPsScrollView,false);
+
+            //ajustando as cores
+            Color randomColor = new Color(
+              Random.Range(0f, 1f),
+              Random.Range(0f, 1f),
+              Random.Range(0f, 1f)
+            );
+
+            //cor do toggle
+            tcpInforPrefab.GetComponentsInChildren<Image>()[0].color = randomColor;
+            //cor do fundo do painel
+            tcpInforPrefab.GetComponentsInChildren<Image>()[2].color = randomColor;
+            //cor da faixa do painel
+            tcpInforPrefab.GetComponentsInChildren<Image>()[3].color = randomColor;
+            //texto do toggle
+            tcpInforPrefab.GetComponentsInChildren<TMPro.TextMeshProUGUI>()[0].text = tcps[j].nomeVariante;
+            //texto do titulo do painel
+            tcpInforPrefab.GetComponentsInChildren<TMPro.TextMeshProUGUI>()[5].text = tcps[j].nomeVariante;
+
+
+            tcpsObjects.Add(tcpInforPrefab);
+
+            tcpColors.Add(randomColor);
+            
         }
-        foreach (var child in GameObject.FindGameObjectsWithTag("tcpName2")) {
-            child.GetComponent<TMPro.TextMeshProUGUI>().text = tcp2.nomeVariante;
-        }
-        foreach (var child in GameObject.FindGameObjectsWithTag("tcpName3")) {
-            child.GetComponent<TMPro.TextMeshProUGUI>().text = tcp3.nomeVariante;
-        }
+        
     }
 
     public void RunStart() {
@@ -101,76 +109,57 @@ public class Main : MonoBehaviour {
     }
 
     private void UpdateInterval() {
-        float valorTcp1 = 0; ;
-        float valorTcp2 = 0;
-        float valorTcp3 = 0;
+        Dictionary<String, float> tcpValuesDic = new Dictionary<string, float>();        
 
-        if (tcp1On)
+        for(int i=0; i < tcpsToggleStates.Count; i++)
         {
-            if(limitReached_y) {
-                valorTcp1 = tcp1.Run(recebidoTcp1Limit);
-            } else {
-                valorTcp1 = tcp1.Run(recebido);
+            if (tcpsToggleStates[i]==true)
+            {
+                if (limitReached_y)
+                {
+                    float value = tcps[i].Run(listRecebidosTcpLimit[i]); //executando com a string respectiva do tcp
+                    tcpValuesDic[tcps[i].nomeVariante] = value;
+                } else
+                {
+                    float value = tcps[i].Run(recebido);
+                    tcpValuesDic[tcps[i].nomeVariante] = value;
+                }
             }
         }
-        if (tcp2On)
-        {
-            if (limitReached_y) {
-                valorTcp2 = tcp2.Run(recebidoTcp2Limit);
-            } else {
-                valorTcp2 = tcp2.Run(recebido);
-            }
-        }
-        if (tcp3On) {
-            if (limitReached_y) {
-                valorTcp3 = tcp3.Run(recebidoTcp3Limit);
-            } else {
-                valorTcp3 = tcp3.Run(recebido);
-            }
-        }
+        print(tcpValuesDic.Values.ToString());
+
         // o recebido eh resetado para que o grafico continue andando, ah nao ser que seja disparado um 
         // tout /tack novamente
         recebido = Abrv.ACK;
         limitReached_y = false;
-        recebidoTcp1Limit = recebidoTcp2Limit = recebidoTcp3Limit = Abrv.ACK;
 
-        if (valorTcp1 >= graphicLimit_y) {
-            limitReached_y = true;
-            recebidoTcp1Limit = Abrv.TACK;
-        }
-        
-        if (valorTcp2 >= graphicLimit_y) {
-            limitReached_y = true;
-            recebidoTcp2Limit = Abrv.TACK;
-        }
-
-        if (valorTcp3 >= graphicLimit_y) {
-            limitReached_y = true;
-            recebidoTcp3Limit = Abrv.TACK;
-        }
-
-        if (tcp1On)
+        for(int i = 0; i < listRecebidosTcpLimit.Count; i++)
         {
-            Debug.Log("CWND:::::" + tcp1.Cwnd);
-            valueListTcp1.Add(valorTcp1);
-            tcp1Obj.GetComponent<Variant>().ChangeCWNDTax(tcp1.Cwnd.ToString());
-            tcp1Obj.GetComponent<Variant>().ChangeCurrentState(tcp1.Estado);
-            Window_Graph.instance.ShowGraph(valueListTcp1, "tcp1");
+            listRecebidosTcpLimit[i]= Abrv.ACK;
         }
 
-        if (tcp2On)
+        int contadorLoop = 0;
+        foreach(String s in tcpValuesDic.Keys)
         {
-            valueListTcp2.Add(valorTcp2);
-            tcp2Obj.GetComponent<Variant>().ChangeCWNDTax(tcp2.Cwnd.ToString());
-            tcp2Obj.GetComponent<Variant>().ChangeCurrentState(tcp2.Estado);
-            Window_Graph.instance.ShowGraph(valueListTcp2, "tcp2");
+            if (tcpValuesDic[s] >= graphicLimit_y)
+            {
+                limitReached_y = true;
+                listRecebidosTcpLimit[contadorLoop] = Abrv.TACK;
+            }
+            contadorLoop++;
         }
 
-        if (tcp3On) {
-            valueListTcp3.Add(valorTcp3);
-            tcp3Obj.GetComponent<Variant>().ChangeCWNDTax(tcp3.Cwnd.ToString());
-            tcp3Obj.GetComponent<Variant>().ChangeCurrentState(tcp3.Estado);
-            Window_Graph.instance.ShowGraph(valueListTcp3, "tcp3");
+        for (int i=0; i < tcpsToggleStates.Count; i++)
+        {
+            if (tcpsToggleStates[i])
+            {
+                valuesList[i].Add(
+                    tcpValuesDic[tcps[i].nomeVariante] //pegando o valor com a chave sendo o nome da variante
+                ); //adicionando na matriz dos valores dos tcps o valor
+                tcpsObjects[i].GetComponent<Variant>().ChangeCWNDTax(tcps[i].Cwnd.ToString());
+                tcpsObjects[i].GetComponent<Variant>().ChangeCurrentState(tcps[i].Estado);
+                Window_Graph.instance.ShowGraph(valuesList[i], ("tcp" + (i + 1).ToString()), tcpColors[i]);
+            }
         }
     }
 
@@ -182,26 +171,6 @@ public class Main : MonoBehaviour {
         recebido = Abrv.TACK;
     }
 
-    public void ResetTcp1()
-    {
-        valueListTcp1.Clear();
-        tcp1 = tcp1.Init();
-        //tcp1 = new TahoeVariantTCP(); //resetando o tcp (janela e sttresh)
-    }
-
-    public void ResetTcp2()
-    {
-        valueListTcp2.Clear();
-        tcp2 = tcp2.Init();
-        //tcp2 = new RenoVariantTCP();
-    }
-
-    public void ResetTcp3() {
-        valueListTcp3.Clear();
-        tcp3 = tcp3.Init();
-        //tcp3 = new CubicVariantTCP();
-    }
-
     public void Reset()
     {
         if (started)
@@ -210,10 +179,14 @@ public class Main : MonoBehaviour {
             changeButtonStart();
         }
         CancelInvoke("UpdateInterval");
-
-        ResetTcp1();
-        ResetTcp2();
-        ResetTcp3();
+        
+        //pra resetar todos:
+        for(int i = 0; i < tcps.Count; i++)
+        {
+            valuesList[i].Clear();
+            tcps[i] = tcps[i].Init();
+        }
+        
         Window_Graph.instance.ClearDotsAndConection();
     }
 
@@ -228,31 +201,16 @@ public class Main : MonoBehaviour {
         }
     }
 
-    public void ChangeTcp1(bool value)
+    public void ChangeTcpState(String nameVariant,bool value)
     {
-        this.tcp1On = value;
-
-        if (!tcp1On)
+        int tcpIndex = 0;
+        foreach(TCP tcp in tcps)
         {
-            ResetTcp1();
-        }
-    }
-
-    public void ChangeTcp2(bool value)
-    {
-        tcp2On = value;
-
-        if (tcp2On==false)
-        {
-            ResetTcp2();
-        }
-    }
-
-    public void ChangeTcp3(bool value) {
-        tcp3On = value;
-
-        if (tcp3On == false) {
-            ResetTcp3();
+            if (tcp.nomeVariante.ToLower().Equals(nameVariant.ToLower()))
+            {
+                tcpsToggleStates[tcpIndex] = value; //mudando o estado do toggle
+            }
+            tcpIndex++;
         }
     }
 }

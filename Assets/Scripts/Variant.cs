@@ -23,13 +23,13 @@ public class Variant : MonoBehaviour
 
         if (toggle.isOn)
         {
-            Choose();
+            Choose(true);
             
         }
 
         toggle.onValueChanged.AddListener(
             (value)=>{
-                Choose();
+                Choose(value);
             }    
         );
 
@@ -37,17 +37,7 @@ public class Variant : MonoBehaviour
             () =>
             {
                 toggle.isOn = false;
-
-                if (gameObject.name.Equals("tcp1".ToLower()))
-                {
-                    Tcp1(false);
-                    print("entrou***********************0");
-                } else if (gameObject.name.Equals("tcp2".ToLower()))
-                {
-                    Tcp2(false);
-                } else if (gameObject.name.Equals("tcp3".ToLower())) {
-                    Tcp3(false);
-                }
+                Choose(false);
 
                 StartCoroutine(turnOffPanel());
                 StartCoroutine(turnOnToggle());
@@ -59,41 +49,20 @@ public class Variant : MonoBehaviour
         
     }
 
-    private void Choose()
+    private void Choose(bool value)
     {
-        if (gameObject.name.Equals("tcp1".ToLower()))
+        GameObject.Find("Manager").GetComponent<Main>().ChangeTcpState(gameObject.name,value);
+        if (value == true)
         {
-            Tcp1(true);
             StartCoroutine(turnOffToggle());
             panel.SetActive(true);
-        }
-        else if (gameObject.name.Equals("tcp2".ToLower()))
+        } else
         {
-            Tcp2(true);
-            StartCoroutine(turnOffToggle());
-            panel.SetActive(true);
-        } else if (gameObject.name.Equals("tcp3".ToLower())) {
-            Tcp3(true);
-            StartCoroutine(turnOffToggle());
-            panel.SetActive(true);
+            StartCoroutine(turnOnToggle());
+            panel.SetActive(false);
         }
     }
-
-    public void Tcp1(bool value)
-    {
-        GameObject.Find("Manager").GetComponent<Main>().ChangeTcp1(value);
-        
-    }
-
-    public void Tcp2(bool value)
-    {
-        GameObject.Find("Manager").GetComponent<Main>().ChangeTcp2(value);
-        
-    }
-
-    public void Tcp3(bool value) {
-        GameObject.Find("Manager").GetComponent<Main>().ChangeTcp3(value);
-    }
+    
 
     public void ChangeCWNDTax(string value)
     {

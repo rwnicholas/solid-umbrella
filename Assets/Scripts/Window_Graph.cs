@@ -5,9 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class Window_Graph : MonoBehaviour {
-    [SerializeField] private Sprite circleSpriteTcp1;
-    [SerializeField] private Sprite circleSpriteTcp2;
-    [SerializeField] private Sprite circlespriteTcp3;
+    [SerializeField] private Sprite circleSpriteTcp;
     [SerializeField]private RectTransform graphContainer; //onde inicia o grafico
     [SerializeField]private List<int> valueList = new List<int>();
     [SerializeField] private RectTransform background;
@@ -24,20 +22,11 @@ public class Window_Graph : MonoBehaviour {
         CreateLinesGraph();
     }
 
-    private GameObject CreateCircle(Vector2 anchoredPosition, string variant) {
+    private GameObject CreateCircle(Vector2 anchoredPosition, string variant, Color color) {
         GameObject gameObject = new GameObject("circle", typeof(Image));
         gameObject.transform.SetParent(graphContainer, false);
-
-        if (variant.ToLower().Equals("tcp1"))
-        {
-            gameObject.GetComponent<Image>().sprite = circleSpriteTcp1;
-        } else if (variant.ToLower().Equals("tcp2"))
-        {
-            gameObject.GetComponent<Image>().sprite = circleSpriteTcp2;
-        } else if (variant.ToLower().Equals("tcp3")) {
-            gameObject.GetComponent<Image>().sprite = circlespriteTcp3;
-        }
-
+        gameObject.GetComponent<Image>().sprite = circleSpriteTcp;
+        gameObject.GetComponent<Image>().color = color;
         
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
@@ -48,7 +37,7 @@ public class Window_Graph : MonoBehaviour {
         return gameObject;
     }
 
-    public void ShowGraph(List<float> valueList, string variant) {
+    public void ShowGraph(List<float> valueList, string variant, Color color) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;
@@ -57,7 +46,7 @@ public class Window_Graph : MonoBehaviour {
         for (int i = 0; i < valueList.Count; i++) {
             float xPosition = xSize + i *xSize;
             float yPosition = (valueList[i] / yMaximum) * graphHeight;
-            GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition), variant);
+            GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition), variant, color);
             if (lastCircleGameObject != null) {
                 CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
             }

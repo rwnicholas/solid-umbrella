@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - tcpName3
+  - tcpName1
+  - tcpName2
+  - tcpName
   layers:
   - Default
   - TransparentFX
