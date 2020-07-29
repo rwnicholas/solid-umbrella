@@ -209,8 +209,17 @@ public class Main : MonoBehaviour {
             if (tcp.nomeVariante.ToLower().Equals(nameVariant.ToLower()))
             {
                 tcpsToggleStates[tcpIndex] = value; //mudando o estado do toggle
+                if (value)
+                {
+                    ChangePositionAccordingToSelecteds(tcpIndex);
+                }
             }
             tcpIndex++;
         }
+    }
+
+    private void ChangePositionAccordingToSelecteds(int index)
+    {
+        tcpsObjects[index].transform.SetAsFirstSibling();
     }
 }
