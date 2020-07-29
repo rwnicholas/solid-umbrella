@@ -5,13 +5,12 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
-using AbreviacoesTCP;
-using TCP_Interface;
+using static ABRV.Abrv;
 using Random = UnityEngine.Random;
 
 public class Main : MonoBehaviour {
     private List<List<float>> valuesList = new List<List<float>>();
-    List<TCP> tcps = new List<TCP>();
+    List<Tcp> tcps = new List<Tcp>();
     List<bool> tcpsToggleStates = new List<bool>();
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
@@ -29,34 +28,50 @@ public class Main : MonoBehaviour {
     List<string> listRecebidosTcpLimit = new List<string>();
 
     public void Start() {
-        print(Application.dataPath);
-        string[] Assemblys = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll");
-        int AssemblyNumber = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll").Length;
-        Assembly[] DLL = new Assembly[AssemblyNumber];
-        for (int i = 0; i < AssemblyNumber; i++) {
-            DLL[i] = Assembly.LoadFile(Assemblys[i]);
-        }
+        //print(Application.dataPath);
+        //string[] Assemblys = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll");
+        //int AssemblyNumber = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll").Length;
+        //Assembly[] DLL = new Assembly[AssemblyNumber];
+        //for (int i = 0; i < AssemblyNumber; i++) {
+        //    DLL[i] = Assembly.LoadFile(Assemblys[i]);
+        //}
 
 
-        for (int i = 0; i < AssemblyNumber; i++) {
-            foreach(Type type in DLL[i].GetExportedTypes()) {
-                var c = Activator.CreateInstance(type);
-                type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
-                TCP tcp = (TCP)c;
+        //for (int i = 0; i < AssemblyNumber; i++) {
+        //    foreach (Type type in DLL[i].GetExportedTypes()) {
+        //        var c = Activator.CreateInstance(type);
+        //        type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
+        //        TCP tcp = (TCP)c;
 
-                //criacao das listas
-                tcps.Add(tcp);
-                tcpsToggleStates.Add(false); //adicionando o estado do toggle de cada um q sera identificado pelo indice
-                listRecebidosTcpLimit.Add("");
-                valuesList.Add(new List<float>());
-                
-            }
-        }
+        //        //criacao das listas
+        //        tcps.Add(tcp);
+        //        tcpsToggleStates.Add(false); //adicionando o estado do toggle de cada um q sera identificado pelo indice
+        //        listRecebidosTcpLimit.Add("");
+        //        valuesList.Add(new List<float>());
 
-        for(int j=0; j < tcps.Count; j++)
+        //    }
+        //}
+
+        tcps.Add(new Tcp_Tahoe());
+        tcpsToggleStates.Add(false);
+        listRecebidosTcpLimit.Add("");
+        valuesList.Add(new List<float>());
+
+        tcps.Add(new Tcp_Reno());
+        tcpsToggleStates.Add(false);
+        listRecebidosTcpLimit.Add("");
+        valuesList.Add(new List<float>());
+
+        tcps.Add(new Tcp_Cubic());
+        tcpsToggleStates.Add(false);
+        listRecebidosTcpLimit.Add("");
+        valuesList.Add(new List<float>());
+
+        for (int j=0; j < tcps.Count; j++)
         {
             GameObject tcpInforPrefab = Instantiate(tcpInformationPanelPrefab);
             tcpInforPrefab.name = tcps[j].nomeVariante;
+            print(tcps[j].nomeVariante);
             tcpInforPrefab.transform.SetParent(contentTCPsScrollView,false);
 
             //ajustando as cores
@@ -90,7 +105,7 @@ public class Main : MonoBehaviour {
         if (!started)
         {
             float updateInterval = 0.5f;
-            recebido = Abrv.ACK;
+            recebido = ACK;
             InvokeRepeating("UpdateInterval", updateInterval, updateInterval); //invoca o metodo com o nome selecionado nos tempo definido e fica repetindo a invocacao a cada tempo definido para isso 
 
             started = true;
@@ -109,7 +124,7 @@ public class Main : MonoBehaviour {
     }
 
     private void UpdateInterval() {
-        Dictionary<String, float> tcpValuesDic = new Dictionary<string, float>();        
+        Dictionary<string, float> tcpValuesDic = new Dictionary<string, float>();        
 
         for(int i=0; i < tcpsToggleStates.Count; i++)
         {
@@ -130,21 +145,21 @@ public class Main : MonoBehaviour {
 
         // o recebido eh resetado para que o grafico continue andando, ah nao ser que seja disparado um 
         // tout /tack novamente
-        recebido = Abrv.ACK;
+        recebido = ACK;
         limitReached_y = false;
 
         for(int i = 0; i < listRecebidosTcpLimit.Count; i++)
         {
-            listRecebidosTcpLimit[i]= Abrv.ACK;
+            listRecebidosTcpLimit[i]= ACK;
         }
 
         int contadorLoop = 0;
-        foreach(String s in tcpValuesDic.Keys)
+        foreach(string s in tcpValuesDic.Keys)
         {
             if (tcpValuesDic[s] >= graphicLimit_y)
             {
                 limitReached_y = true;
-                listRecebidosTcpLimit[contadorLoop] = Abrv.TACK;
+                listRecebidosTcpLimit[contadorLoop] = TACK;
             }
             contadorLoop++;
         }
@@ -164,11 +179,11 @@ public class Main : MonoBehaviour {
     }
 
     public void timeout() {
-        recebido = Abrv.TOUT;
+        recebido = TOUT;
     }
 
     public void tack() {
-        recebido = Abrv.TACK;
+        recebido = TACK;
     }
 
     public void Reset()
@@ -184,6 +199,7 @@ public class Main : MonoBehaviour {
         for(int i = 0; i < tcps.Count; i++)
         {
             valuesList[i].Clear();
+
             tcps[i] = tcps[i].Init();
         }
         
@@ -201,10 +217,10 @@ public class Main : MonoBehaviour {
         }
     }
 
-    public void ChangeTcpState(String nameVariant,bool value)
+    public void ChangeTcpState(string nameVariant, bool value)
     {
         int tcpIndex = 0;
-        foreach(TCP tcp in tcps)
+        foreach(Tcp tcp in tcps)
         {
             if (tcp.nomeVariante.ToLower().Equals(nameVariant.ToLower()))
             {
