@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using TCP_Interface;
 
 public class Window_Graph : MonoBehaviour {
     [SerializeField] private Sprite circleSpriteTcp;
@@ -22,8 +23,13 @@ public class Window_Graph : MonoBehaviour {
         CreateLinesGraph();
     }
 
-    private GameObject CreateCircle(Vector2 anchoredPosition, string variant, Color color) {
+    private GameObject CreateCircle(Vector2 anchoredPosition, TCP tcp, Color color) {
         GameObject gameObject = new GameObject("circle", typeof(Image));
+        gameObject.AddComponent<CircleCollider2D>().radius = 2.53f;
+        
+        gameObject.AddComponent<ChartCircle>();
+        gameObject.GetComponent<ChartCircle>().AddAtributesValues(tcp.Cwnd, tcp.Estado);
+
         gameObject.transform.SetParent(graphContainer, false);
         gameObject.GetComponent<Image>().sprite = circleSpriteTcp;
         gameObject.GetComponent<Image>().color = color;
@@ -37,7 +43,7 @@ public class Window_Graph : MonoBehaviour {
         return gameObject;
     }
 
-    public void ShowGraph(List<float> valueList, string variant, Color color) {
+    public void ShowGraph(List<float> valueList, TCP tcp, Color color) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;
@@ -46,7 +52,7 @@ public class Window_Graph : MonoBehaviour {
         for (int i = 0; i < valueList.Count; i++) {
             float xPosition = xSize + i *xSize;
             float yPosition = (valueList[i] / yMaximum) * graphHeight;
-            GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition), variant, color);
+            GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition), tcp, color);
             if (lastCircleGameObject != null) {
                 CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
             }
@@ -72,7 +78,7 @@ public class Window_Graph : MonoBehaviour {
     {
         GameObject linha = Instantiate(line) as GameObject;
         linha.transform.SetParent(background, false);
-        float tax = 0.6f;
+        float tax = 0.75f;
         linha.transform.position = new Vector3(lineReference.position.x, lineReference.position.y, linha.transform.position.z);
 
         int n = 0;
@@ -85,7 +91,7 @@ public class Window_Graph : MonoBehaviour {
         
         for (int i = 1; i < 11; i++)
         {
-            n += 20;
+            n += 10;
             float pos = lineReference.position.y + tax;
             linha = Instantiate(line) as GameObject;
             linha.transform.SetParent(background, false);

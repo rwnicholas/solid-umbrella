@@ -60,6 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\ChartCircle.cs" />
+    <Compile Include="Assets\Scripts\ChartPointInformation.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
     <Compile Include="Assets\Scripts\Variant.cs" />
     <Compile Include="Assets\Scripts\Window_Graph.cs" />

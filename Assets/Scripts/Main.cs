@@ -22,6 +22,7 @@ public class Main : MonoBehaviour {
     [SerializeField] private List<GameObject> tcpsObjects;
     [SerializeField] private RectTransform contentTCPsScrollView;
     [SerializeField] private GameObject tcpInformationPanelPrefab;
+    public GameObject circleInformationPrefab;
     [SerializeField] private List<Color> tcpColors = new List<Color>();
     
     public const float graphicLimit_y = 100;
@@ -158,7 +159,7 @@ public class Main : MonoBehaviour {
                 ); //adicionando na matriz dos valores dos tcps o valor
                 tcpsObjects[i].GetComponent<Variant>().ChangeCWNDTax(tcps[i].Cwnd.ToString());
                 tcpsObjects[i].GetComponent<Variant>().ChangeCurrentState(tcps[i].Estado);
-                Window_Graph.instance.ShowGraph(valuesList[i], ("tcp" + (i + 1).ToString()), tcpColors[i]);
+                Window_Graph.instance.ShowGraph(valuesList[i], tcps[i], tcpColors[i]);
             }
         }
     }
