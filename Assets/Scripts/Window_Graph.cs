@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using TCP_Interface;
 
 public class Window_Graph : MonoBehaviour {
     [SerializeField] private Sprite circleSpriteTcp;
@@ -23,7 +21,7 @@ public class Window_Graph : MonoBehaviour {
         CreateLinesGraph();
     }
 
-    private GameObject CreateCircle(Vector2 anchoredPosition, TCP tcp, Color color) {
+    private GameObject CreateCircle(Vector2 anchoredPosition, Tcp tcp, Color color) {
         GameObject gameObject = new GameObject("circle", typeof(Image));
         gameObject.AddComponent<CircleCollider2D>().radius = 2.53f;
         
@@ -43,7 +41,7 @@ public class Window_Graph : MonoBehaviour {
         return gameObject;
     }
 
-    public void ShowGraph(List<float> valueList, TCP tcp, Color color) {
+    public void ShowGraph(List<float> valueList, Tcp tcp, Color color) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;

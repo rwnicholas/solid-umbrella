@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TCP_Interface;
 
 public class ChartCircle : MonoBehaviour
 {
