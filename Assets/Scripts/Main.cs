@@ -9,9 +9,10 @@ using static ABRV.Abrv;
 using Random = UnityEngine.Random;
 
 public class Main : MonoBehaviour {
-    private List<List<float>> valuesList = new List<List<float>>();
-    List<Tcp> tcps = new List<Tcp>();
-    List<bool> tcpsToggleStates = new List<bool>();
+    static public List<List<float>> valuesList = new List<List<float>>();
+    static public List<Tcp> tcps = new List<Tcp>();
+    static public List<bool> tcpsToggleStates = new List<bool>();
+    static public List<string> listRecebidosTcpLimit = new List<string>();
     public string recebido;
     private bool started = false; //flag pra dizer que ja iniciou
 
@@ -26,7 +27,6 @@ public class Main : MonoBehaviour {
     
     public const float graphicLimit_y = 100;
     public bool limitReached_y = false;
-    List<string> listRecebidosTcpLimit = new List<string>();
 
     public void Start() {
         //print(Application.dataPath);
@@ -53,20 +53,8 @@ public class Main : MonoBehaviour {
         //    }
         //}
 
-        tcps.Add(new Tcp_Tahoe());
-        tcpsToggleStates.Add(false);
-        listRecebidosTcpLimit.Add("");
-        valuesList.Add(new List<float>());
-
-        tcps.Add(new Tcp_Reno());
-        tcpsToggleStates.Add(false);
-        listRecebidosTcpLimit.Add("");
-        valuesList.Add(new List<float>());
-
-        tcps.Add(new Tcp_Cubic());
-        tcpsToggleStates.Add(false);
-        listRecebidosTcpLimit.Add("");
-        valuesList.Add(new List<float>());
+        AddTCP addTCP = new AddTCP();
+        addTCP.Init();
 
         for (int j=0; j < tcps.Count; j++)
         {
