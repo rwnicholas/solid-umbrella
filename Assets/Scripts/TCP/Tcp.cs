@@ -11,7 +11,7 @@ public abstract class Tcp {
 
     protected Tcp() {
 		cwnd = 1;
-		ssthreshold = 25.0f;
+		ssthreshold = 64.0f;
 		estado = "Partida Lenta";
 	}
 
