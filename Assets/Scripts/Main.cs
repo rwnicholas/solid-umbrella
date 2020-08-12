@@ -29,32 +29,10 @@ public class Main : MonoBehaviour {
     public bool limitReached_y = false;
 
     public void Start() {
-        //print(Application.dataPath);
-        //string[] Assemblys = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll");
-        //int AssemblyNumber = Directory.GetFiles(Application.dataPath + "\\TCPs\\", "TCP_Variant_*.dll").Length;
-        //Assembly[] DLL = new Assembly[AssemblyNumber];
-        //for (int i = 0; i < AssemblyNumber; i++) {
-        //    DLL[i] = Assembly.LoadFile(Assemblys[i]);
-        //}
-
-
-        //for (int i = 0; i < AssemblyNumber; i++) {
-        //    foreach (Type type in DLL[i].GetExportedTypes()) {
-        //        var c = Activator.CreateInstance(type);
-        //        type.InvokeMember("Init", BindingFlags.InvokeMethod, null, c, null);
-        //        TCP tcp = (TCP)c;
-
-        //        //criacao das listas
-        //        tcps.Add(tcp);
-        //        tcpsToggleStates.Add(false); //adicionando o estado do toggle de cada um q sera identificado pelo indice
-        //        listRecebidosTcpLimit.Add("");
-        //        valuesList.Add(new List<float>());
-
-        //    }
-        //}
 
         AddTCP addTCP = new AddTCP();
         addTCP.Init();
+        
 
         for (int j=0; j < tcps.Count; j++)
         {
@@ -85,8 +63,9 @@ public class Main : MonoBehaviour {
             tcpsObjects.Add(tcpInforPrefab);
 
             tcpColors.Add(randomColor);
-            
         }
+
+        Window_Graph.instance.CreateTcpsLists(tcps, tcpColors);
         
     }
 
@@ -162,7 +141,8 @@ public class Main : MonoBehaviour {
                 ); //adicionando na matriz dos valores dos tcps o valor
                 tcpsObjects[i].GetComponent<Variant>().ChangeCWNDTax(tcps[i].Cwnd.ToString());
                 tcpsObjects[i].GetComponent<Variant>().ChangeCurrentState(tcps[i].Estado);
-                Window_Graph.instance.ShowGraph(valuesList[i], tcps[i], tcpColors[i]);
+                //Window_Graph.instance.ShowGraph(valuesList[i], tcps[i], tcpColors[i]);
+                Window_Graph.instance.AddTcpValue(tcps[i].nomeVariante, valuesList[i][(valuesList[i].Count-1)]);
             }
         }
     }

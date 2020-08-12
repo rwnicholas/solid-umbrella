@@ -63,6 +63,13 @@
     <Compile Include="Assets\Scripts\ChartCircle.cs" />
     <Compile Include="Assets\Scripts\ChartPointInformation.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
+    <Compile Include="Assets\Scripts\TCP\Abrv.cs" />
+    <Compile Include="Assets\Scripts\TCP\AddTCP.cs" />
+    <Compile Include="Assets\Scripts\TCP\Tcp.cs" />
+    <Compile Include="Assets\Scripts\TCP\Tcp_Cubic.cs" />
+    <Compile Include="Assets\Scripts\TCP\Tcp_Reno.cs" />
+    <Compile Include="Assets\Scripts\TCP\Tcp_Tahoe.cs" />
+    <Compile Include="Assets\Scripts\UnirxTest.cs" />
     <Compile Include="Assets\Scripts\Variant.cs" />
     <Compile Include="Assets\Scripts\Window_Graph.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
@@ -298,21 +305,6 @@
     </Reference>
     <Reference Include="UnityEngine.SpatialTracking">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.22f1/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
-    </Reference>
-    <Reference Include="AbreviacoesTCP">
-      <HintPath>C:/Users/samil/Documents/Desenvolvimento/Unity/PIBIC/solid-umbrella/Assets/Scripts/TCP/AbreviacoesTCP.dll</HintPath>
-    </Reference>
-    <Reference Include="TCP_Interface">
-      <HintPath>C:/Users/samil/Documents/Desenvolvimento/Unity/PIBIC/solid-umbrella/Assets/Scripts/TCP/TCP_Interface.dll</HintPath>
-    </Reference>
-    <Reference Include="TCP_Variant_Cubic">
-      <HintPath>C:/Users/samil/Documents/Desenvolvimento/Unity/PIBIC/solid-umbrella/Assets/TCPs/TCP_Variant_Cubic.dll</HintPath>
-    </Reference>
-    <Reference Include="TCP_Variant_Reno">
-      <HintPath>C:/Users/samil/Documents/Desenvolvimento/Unity/PIBIC/solid-umbrella/Assets/TCPs/TCP_Variant_Reno.dll</HintPath>
-    </Reference>
-    <Reference Include="TCP_Variant_Tahoe">
-      <HintPath>C:/Users/samil/Documents/Desenvolvimento/Unity/PIBIC/solid-umbrella/Assets/TCPs/TCP_Variant_Tahoe.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>C:/Users/samil/Documents/Desenvolvimento/Unity/PIBIC/solid-umbrella/Library/PackageCache/com.unity.analytics@3.2.3/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
@@ -662,6 +654,12 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2018.4.22f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="UniRx.csproj">
+      <Project>{C12A7446-DA6F-C089-290D-C7BDD72B451B}</Project>
+      <Name>UniRx</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

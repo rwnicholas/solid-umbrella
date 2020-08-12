@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UniRx;
 
 public class Window_Graph : MonoBehaviour {
     [SerializeField] private Sprite circleSpriteTcp;
@@ -11,6 +12,11 @@ public class Window_Graph : MonoBehaviour {
     [SerializeField] private GameObject line;
     [SerializeField] private RectTransform lineReference;
     [SerializeField] private GameObject numberLine;
+    
+    [SerializeField] private Dictionary<string, ReactiveCollection<float>> tcpsValuesList = new Dictionary<string, ReactiveCollection<float>>(); //lista que vai cuidar do valor de cada tcp
+
+    [SerializeField] private int counterLastUsedCircle = 0;  //vai contar do ultimo circulo utilizado pra n ter q reconstruir a lista
+    private int iterations = 0; //vai contar as iteracoes pra que o contador de circulos so aumente de dois em 2
 
     public static Window_Graph instance;
 
@@ -21,17 +27,43 @@ public class Window_Graph : MonoBehaviour {
         CreateLinesGraph();
     }
 
-    private GameObject CreateCircle(Vector2 anchoredPosition, Tcp tcp, Color color) {
+    public void CreateTcpsLists(List<Tcp> tcps, List<Color> colors)
+    {
+        int contColor = 0;
+        foreach(Tcp tcpKey in tcps)
+        {
+            ReactiveCollection<float> collection = new ReactiveCollection<float>();
+            collection.ObserveAdd().Subscribe(
+            x => {
+                print("INDex=>" + x.Index);
+                this.ShowGraph(x.Value, x.Index, tcpKey, colors[tcps.IndexOf(tcpKey)]);
+            }
+        );
+            tcpsValuesList.Add(tcpKey.nomeVariante, collection);
+            contColor++;
+        }
+    }
+    GameObject lastCircleGameObject = null; //mudar isso pro inicio depois
+
+    public void AddTcpValue(string tcpKey, float newValue)
+    {
+        if (tcpsValuesList.ContainsKey(tcpKey))
+        {
+            tcpsValuesList[tcpKey].Add(newValue);
+        }
+    }
+
+    private GameObject CreateCircle(Vector2 anchoredPosition, Tcp tcp, Color color) { //tinha o tcp e a cor
         GameObject gameObject = new GameObject("circle", typeof(Image));
         gameObject.AddComponent<CircleCollider2D>().radius = 2.53f;
-        
+
         gameObject.AddComponent<ChartCircle>();
         gameObject.GetComponent<ChartCircle>().AddAtributesValues(tcp.Cwnd, tcp.Estado);
 
         gameObject.transform.SetParent(graphContainer, false);
         gameObject.GetComponent<Image>().sprite = circleSpriteTcp;
         gameObject.GetComponent<Image>().color = color;
-        
+
         RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = anchoredPosition;
         rectTransform.sizeDelta = new Vector2(5, 5);
@@ -41,21 +73,21 @@ public class Window_Graph : MonoBehaviour {
         return gameObject;
     }
 
-    public void ShowGraph(List<float> valueList, Tcp tcp, Color color) {
+    public void ShowGraph(float value, int index, Tcp tcp, Color color) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;
-        
-        GameObject lastCircleGameObject = null;
-        for (int i = 0; i < valueList.Count; i++) {
-            float xPosition = xSize + i *xSize;
-            float yPosition = (valueList[i] / yMaximum) * graphHeight;
-            GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition), tcp, color);
-            if (lastCircleGameObject != null) {
-                CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
-            }
-            lastCircleGameObject = circleGameObject;
+
+        float xPosition = xSize + index * xSize;
+        float yPosition = (value / yMaximum) * graphHeight;
+        GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition), tcp, color);
+        if (lastCircleGameObject != null)
+        {
+            CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
         }
+        lastCircleGameObject = circleGameObject;
+        
+
     }
 
     private void CreateDotConnection(Vector2 dotPositionA, Vector2 dotPositionB) {
