@@ -14,5 +14,6 @@ public class AddTCP {
         Main.tcpsToggleStates.Add(false);
         Main.listRecebidosTcpLimit.Add("");
         Main.valuesList.Add(new List<float>());
+        Window_Graph.lastCircleGameObject.Add(null);
     }
 }

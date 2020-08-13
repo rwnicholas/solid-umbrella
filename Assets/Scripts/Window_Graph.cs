@@ -20,6 +20,7 @@ public class Window_Graph : MonoBehaviour {
 
     public static Window_Graph instance;
 
+
     private void Awake() {
         graphContainer = transform.Find("graphContainer").GetComponent<RectTransform>();
         background = transform.Find("background").GetComponent<RectTransform>();
@@ -30,20 +31,21 @@ public class Window_Graph : MonoBehaviour {
     public void CreateTcpsLists(List<Tcp> tcps, List<Color> colors)
     {
         int contColor = 0;
+
         foreach(Tcp tcpKey in tcps)
         {
             ReactiveCollection<float> collection = new ReactiveCollection<float>();
             collection.ObserveAdd().Subscribe(
-            x => {
-                print("INDex=>" + x.Index);
-                this.ShowGraph(x.Value, x.Index, tcpKey, colors[tcps.IndexOf(tcpKey)]);
-            }
-        );
+                x => {
+                    print("INDex=>" + x.Index);
+                    this.ShowGraph(x.Value, x.Index, tcpKey, colors[tcps.IndexOf(tcpKey)], tcps.IndexOf(tcpKey));
+                }
+            );
             tcpsValuesList.Add(tcpKey.nomeVariante, collection);
             contColor++;
         }
     }
-    GameObject lastCircleGameObject = null; //mudar isso pro inicio depois
+    public static List<GameObject> lastCircleGameObject = new List<GameObject>(); //mudar isso pro inicio depois
 
     public void AddTcpValue(string tcpKey, float newValue)
     {
@@ -73,7 +75,7 @@ public class Window_Graph : MonoBehaviour {
         return gameObject;
     }
 
-    public void ShowGraph(float value, int index, Tcp tcp, Color color) {
+    public void ShowGraph(float value, int index, Tcp tcp, Color color, int idTCP) {
         float graphHeight = graphContainer.sizeDelta.y;
         float yMaximum = 100f;
         float xSize = 5f;
@@ -81,11 +83,12 @@ public class Window_Graph : MonoBehaviour {
         float xPosition = xSize + index * xSize;
         float yPosition = (value / yMaximum) * graphHeight;
         GameObject circleGameObject = CreateCircle(new Vector2(xPosition, yPosition), tcp, color);
-        if (lastCircleGameObject != null)
+        print(idTCP);
+        if (lastCircleGameObject[idTCP] != null)
         {
-            CreateDotConnection(lastCircleGameObject.GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
+            CreateDotConnection(lastCircleGameObject[idTCP].GetComponent<RectTransform>().anchoredPosition, circleGameObject.GetComponent<RectTransform>().anchoredPosition);
         }
-        lastCircleGameObject = circleGameObject;
+        lastCircleGameObject[idTCP] = circleGameObject;
         
 
     }
